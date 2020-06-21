@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>vue</title>
+    <link type="text/css" rel="stylesheet" href="./bootstrap/css/bootstrap.css">
+</head>
+<body>
+<div id="app" class="container-fluid">
+    <ol class="breadcrumb">
+        <li><a href="#">用户管理</a></li>
+        <!--    <li><a href="#">操作</a></li>-->
+        <li class="active">查询</li>
+    </ol>
+    <form class="form-inline">
+        <div class="form-group">
+            <label for="username">用户名</label>
+            <input type="text" v-model="user.username" class="form-control" id="username" placeholder="请输入用户名">
+        </div>
+        <div class="form-group">
+            <label for="age">年龄</label>
+            <input type="text" v-model="user.age" class="form-control" id="age" placeholder="请输入年龄">
+        </div>
+        <div class="form-group">
+            <label for="phone">手机号码</label>
+            <input type="text" v-model="user.phone" class="form-control" id="phone" placeholder="请输入手机号码">
+        </div>
+        <div class="form-group">
+            <label for="address">地址</label>
+            <input type="text" v-model="user.address" class="form-control" id="address" placeholder="请输入地址">
+        </div>
+        <button type="submit" class="btn btn-success" @click.prevent="query">查询</button>
+    </form>
+
+    <div class="table-responsive" style="margin-top: 10px;">
+        <button class="btn btn-danger" @click.prevent="query">新增</button>
+        <table class="table table-bordered table-hover">
+            <thead>
+            <tr>
+                <td>序号</td>
+                <td>用户名</td>
+                <td>密码</td>
+                <td>年龄</td>
+                <td>手机号码</td>
+                <td>地址</td>
+                <td>操作</td>
+            </tr>
+            </thead>
+            <tbody>
+            <tr v-for="user,index in users" :key="user.id">
+                <td v-text="index+1"></td>
+                <td v-text="user.username"></td>
+                <td v-text="user.password"></td>
+                <td v-text="user.age"></td>
+                <td v-text="user.phone"></td>
+                <td v-text="user.address"></td>
+                <td>
+                    <a href="#" class="btn btn-primary">编辑</a>
+                    <a href="#" class="btn btn-danger" @click="deleteUser(user.id)">删除</a>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<script src="vue/vue.js"></script>
+<script src="axios/axios.min.js"></script>
+
+<script>
+    let vue = new Vue({
+        el:"#app",
+        data:{
+            users:[],
+            user:{},
+            username:"",
+            password:"",
+            age:"",
+            phone:"",
+            address:"",
+        },
+        methods:{
+            query(){
+                let _this = this;
+                axios.post("http://localhost:8080/user/findUser",this.user).then(function (response) {
+                        if(response.data.code=="200"){
+                            _this.users = response.data.data;
+                        }else{
+                            alert(response.data.message);
+                        }
+                    }).catch(function(error){
+                        alert(error);
+                    });
+            },
+            deleteUser(id){
+                let _this = this;
+                axios.get("http://localhost:8080/user/deleteUser?id="+id).then(function (response) {
+                    if(response.data.code=="200"){
+                        //重新刷新页面查询
+                        _this.query();
+                    }else{
+                        alert(response.data.message);
+                    }
+                }).catch(function (error) {
+                    alert(error);
+                })
+            }
+        },
+        created(){
+            this.query();
+        }
+    })
+
+</script>
+</body>
+</html>

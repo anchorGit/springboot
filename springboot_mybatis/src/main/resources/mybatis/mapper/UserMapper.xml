@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.mzs.springboot.mapper.UserMapper">
+<!--    public List<User> findAllUser();-->
+<!--    public List<User> findUser(User user);-->
+<!--    public void saveUser(User user);-->
+<!--    public void deleteUser (String id);-->
+<!--    public void updateUser(User user);-->
+
+    <select id="findAllUser" resultType="cn.mzs.springboot.entity.User">
+        select id,username,password,age,phone,address from t_user t
+    </select>
+
+    <select id="findUser" resultType="cn.mzs.springboot.entity.User" parameterType="cn.mzs.springboot.entity.User">
+        select id,username,password,age,phone,address from t_user t
+        <where>
+            <if test="id!=null and id!=''">
+                and id = #{id}
+            </if>
+            <if test="username!=null and username!=''">
+                and username = #{username}
+            </if>
+            <if test="age!=null and age!=''">
+                and age = #{age}
+            </if>
+            <if test="phone!=null and phone!=''">
+                and phone = #{phone}
+            </if>
+            <if test="address!=null and address!=''">
+                and address = #{address}
+            </if>
+        </where>
+    </select>
+
+    <insert id="saveUser" parameterType="cn.mzs.springboot.entity.User">
+        insert into t_user
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                id,
+            </if>
+            <if test="username != null">
+                username,
+            </if>
+            <if test="password != null">
+                password,
+            </if>
+            <if test="age != null">
+                age,
+            </if>
+            <if test="phone != null">
+                phone,
+            </if>
+            <if test="address != null">
+                address,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                #{id,jdbcType=VARCHAR},
+            </if>
+            <if test="username != null">
+                #{username,jdbcType=VARCHAR},
+            </if>
+            <if test="password != null">
+                #{password,jdbcType=VARCHAR},
+            </if>
+            <if test="age != null">
+                #{age,jdbcType=INTEGER},
+            </if>
+            <if test="phone != null">
+                #{phone,jdbcType=INTEGER},
+            </if>
+            <if test="address != null">
+                #{address,jdbcType=INTEGER},
+            </if>
+        </trim>
+    </insert>
+
+    <delete id="deleteUser" parameterType="java.lang.String">
+        delete from t_user where id = #{id,jdbcType=VARCHAR}
+    </delete>
+
+    <update id="updateUser" parameterType="cn.mzs.springboot.entity.User">
+        update t_user
+        <set>
+            <if test="username != null">
+                username = #{username,jdbcType=VARCHAR},
+            </if>
+            <if test="password != null">
+                password = #{password,jdbcType=VARCHAR},
+            </if>
+            <if test="age != null">
+                age = #{age,jdbcType=VARCHAR},
+            </if>
+            <if test="phone != null">
+                phone = #{phone,jdbcType=VARCHAR},
+            </if>
+            <if test="address != null">
+                address = #{address,jdbcType=VARCHAR},
+            </if>
+        </set>
+        where id = #{id,jdbcType=VARCHAR}
+    </update>
+
+    <select id="selectUserList" parameterType="cn.mzs.springboot.entity.User" resultType="cn.mzs.springboot.entity.User">
+        select * from t_user where 1=1
+        <if test="id != null">
+            id = #{id,jdbcType=VARCHAR},
+        </if>
+        <if test="username != null">
+            username = #{username,jdbcType=VARCHAR},
+        </if>
+        <if test="password != null">
+            password = #{password,jdbcType=VARCHAR},
+        </if>
+        <if test="age != null">
+            age = #{age,jdbcType=VARCHAR},
+        </if>
+        <if test="phone != null">
+            phone = #{phone,jdbcType=VARCHAR},
+        </if>
+        <if test="address != null">
+            address = #{address,jdbcType=VARCHAR},
+        </if>
+    </select>
+</mapper>
