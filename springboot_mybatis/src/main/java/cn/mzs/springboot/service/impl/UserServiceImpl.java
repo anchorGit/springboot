@@ -6,8 +6,10 @@ import cn.mzs.springboot.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.RequestBody;
 
 import java.util.List;
+import java.util.UUID;
 
 @Service
 @Transactional
@@ -21,12 +23,13 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public List<User> findUser(User user) {
+    public List<User> findUser(@RequestBody User user) {
         return userMapper.findUser(user);
     }
 
     @Override
-    public void saveUser(User user) {
+    public void saveUser(@RequestBody User user) {
+        user.setId(UUID.randomUUID().toString());
         userMapper.saveUser(user);
     }
 

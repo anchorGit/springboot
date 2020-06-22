@@ -30,7 +30,7 @@ public class UserController {
     }
 
     @RequestMapping("/findUser")
-    public Result findUser(User user){
+    public Result findUser(@RequestBody User user){
         try {
             List<User> list = userService.findUser(user);
             return Result.success(list);
@@ -40,7 +40,7 @@ public class UserController {
     }
 
     @RequestMapping("/saveUser")
-    public Result saveUser(User user){
+    public Result saveUser(@RequestBody User user){
         try {
             userService.saveUser(user);
             return Result.success();
